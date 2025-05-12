@@ -1,0 +1,100 @@
+Design Documentation: Optimized Garbage Classification Using scikit-learn
+1. Overall Approach and Architecture
+This project implements a traditional machine learning pipeline for image classification, specifically targeting the classification of different types of garbage 
+
+without using deep learning techniques. The approach consists of the following key stages:
+
+Image Preprocessing:
+
+Convert RGB images to grayscale.
+
+Apply histogram equalization to enhance contrast.
+
+Use the Sobel edge detector to extract structural features.
+
+Feature Extraction:
+
+Statistical Features: Mean and standard deviation of pixel intensities.
+
+Histogram Features: A histogram with 16 bins representing intensity distribution.
+
+Edge Features: Edge density calculated using the Canny edge detector.
+
+Texture Features: Approximated using pixel difference calculations, inspired by the Gray-Level Co-occurrence Matrix (GLCM).
+
+Region-Based Features: Average pixel intensities over a 4×4 grid (16 regions) to preserve spatial information.
+
+Model Training and Evaluation:
+
+Features are used to train a RandomForestClassifier.
+
+Model performance is evaluated using accuracy score, classification report, and confusion matrix.
+
+Feature importance is visualized to identify the most significant contributors.
+
+2. Challenges Faced and Solutions
+Challenge	Solution
+Inconsistent lighting and poor contrast in images	Applied histogram equalization to normalize image brightness and contrast.
+High computational cost of deep learning	Used classical machine learning with handcrafted features to ensure efficiency and simplicity.
+Small or limited labeled dataset	Focused on extracting generalizable and robust features that do not require large data volumes.
+Risk of model overfitting	Used a RandomForestClassifier, which handles overfitting well through ensemble learning.
+
+3. Algorithm Selection Justification
+The Random Forest Classifier was selected due to the following advantages:
+
+Handles high-dimensional data and nonlinear relationships effectively.
+
+Resistant to overfitting compared to individual decision trees.
+
+Provides built-in feature importance scores for model interpretation.
+
+Does not require feature scaling.
+
+Supports parallel training via n_jobs=-1.
+
+Although models such as SVM, KNN, and Logistic Regression were considered, Random Forest was preferred for its simplicity, robustness, and interpretability in early-stage development.
+
+4. Implementation Notes
+A. Parameter Tuning
+n_estimators=100: Chosen to balance training time and model accuracy.
+
+random_state=42: Used to ensure consistent and reproducible results.
+
+img_size=(128, 128): Selected as a compromise between image detail and processing efficiency.
+
+Sobel edge kernel: ksize=3 – a commonly used kernel size for edge detection.
+
+B. Performance Optimization
+Grayscale conversion and histogram equalization reduce data complexity while enhancing important features.
+
+Compact feature vectors (about 37 elements) ensure fast training and inference.
+
+Code is modularized using clear function definitions (preprocess_image, extract_features, etc.) for scalability and reuse.
+
+5. Future Work and Enhancements
+Model Comparison:
+
+Evaluate alternative models (SVM, KNN, Logistic Regression, XGBoost) for potential performance improvements.
+
+Data Augmentation:
+
+Introduce rotation, flipping, and brightness adjustments to increase training data diversity.
+
+Feature Selection:
+
+Use techniques like SelectKBest, PCA, or Recursive Feature Elimination (RFE) to optimize the feature set.
+
+Hyperparameter Tuning:
+
+Employ GridSearchCV or RandomizedSearchCV to find the best model parameters.
+
+Deployment:
+
+Package the model into a web app using Streamlit or Flask.
+
+Export the trained model with joblib for integration into other systems.
+
+Explainability:
+
+Apply SHAP or LIME to interpret predictions and better understand model behavior.
+
